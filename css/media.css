@@ -74,6 +74,11 @@
 }
 
 @media screen and (min-width: 751px) {
+  .inside #maincontent {
+    position: relative;
+    top: 115px;
+  }
+
   /*Navigation*/
   nav h1 a {
     letter-spacing: 7px;
@@ -118,7 +123,6 @@
   }
 
   /*Footer*/
-
   .inside #footer {
     bottom: -115px;
   }
