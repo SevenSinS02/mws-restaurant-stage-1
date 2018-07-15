@@ -3,6 +3,7 @@
 
 body {
   margin: 0;
+  overflow: hidden;
 }
 
 .container {
@@ -41,6 +42,16 @@ body {
 
 .title a:hover {
   text-decoration: underline #fff;
+}
+
+/*footer*/
+footer {
+  bottom: 0;
+  position: absolute;
+  color: #fff;
+  padding: 20px;
+  text-align: center;
+  width: 100%;
 }
 
 /*media queries*/
