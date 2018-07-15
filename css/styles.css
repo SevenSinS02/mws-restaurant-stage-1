@@ -1,20 +1,31 @@
 @charset "utf-8";
 /* CSS Document */
 
+/*base setup for all elements*/
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+
 body,
 td,
 th,
 p {
   font-family: Lato, Helvetica, sans-serif;
-  font-size: 10pt;
+  font-size: 14px;
   color: #333;
   line-height: 1.5;
+  text-align: left;
 }
 
 body {
   background-color: #fdfdfd;
   margin: 0;
   position: relative;
+  box-sizing: border-box;
 }
 
 ul,
@@ -109,7 +120,7 @@ nav h1 a {
   padding: 10px 40px 16px;
   list-style: none;
   background-color: #eee;
-  font-size: 17px;
+  font-size: 16px;
   margin: 0;
   width: calc(50% - 80px);
 }
@@ -265,7 +276,7 @@ nav h1 a {
   position: fixed;
   top: 0;
   width: 100%;
-  z-index: 1000;
+  z-index: 9999;
 }
 
 .inside #map-container {
@@ -285,8 +296,8 @@ nav h1 a {
 
 .inside #footer {
   bottom: 0;
-  position: absolute;
-  width: 50%;
+  position: relative;
+  width: 100%;
 }
 
 #restaurant-name {
@@ -296,12 +307,16 @@ nav h1 a {
   font-weight: 200;
   letter-spacing: 0;
   margin: 15px 0 30px;
+  text-align: center;
   text-transform: uppercase;
   line-height: 1.1;
 }
 
-#restaurant-img {
-  width: 90%;
+#restaurant-img,
+#reviews-list li {
+  width: 100%;
+  border-bottom-right-radius: 30px;
+  border-top-left-radius: 30px;
 }
 
 #restaurant-address {
@@ -319,14 +334,14 @@ nav h1 a {
   padding: 2px 0;
   text-align: center;
   text-transform: uppercase;
-  width: 90%;
+  width: 100%;
 }
 
 #restaurant-container,
 #reviews-container {
   border-bottom: 1px solid #d9d9d9;
   border-top: 1px solid #fff;
-  padding: 140px 40px 30px;
+  padding: 40px 80px;
   width: 50%;
 }
 
@@ -354,13 +369,47 @@ nav h1 a {
   list-style-type: none;
   margin: 0 0 30px;
   overflow: hidden;
-  padding: 0 20px 20px;
   position: relative;
-  width: 85%;
 }
 
 #reviews-list li p {
-  margin: 0 0 10px;
+  margin: 20px 0;
+}
+
+.review-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  background: #333;
+}
+
+.review-title p {
+  color: #fff;
+  font-weight: 100;
+}
+
+.review-title p:first-of-type {
+  font-size: 20px;
+  font-weight: 400;
+}
+
+.review-content {
+  padding: 0 20px 20px;
+}
+
+.review-content p {
+  color: #666;
+}
+
+.review-content p:first-of-type {
+  background: #ffa500;
+  padding: 10px;
+  color: #fff;
+  font-weight: 400;
+  font-size: 16px;
+  letter-spacing: 2px;
+  text-align: center;
 }
 
 #restaurant-hours td {
