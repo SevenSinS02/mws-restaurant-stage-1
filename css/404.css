@@ -1,0 +1,57 @@
+@charset "utf-8";
+/* 404 CSS Document */
+
+body {
+  margin: 0;
+}
+
+.container {
+  height: 100vh;
+  background: url(../img/error.jpg) no-repeat 45% / cover;
+}
+
+.title {
+  top: 40px;
+  position: relative;
+  margin: 0 auto;
+  width: 80%;
+  text-align: center;
+  color: #484848;
+}
+
+.title h1 {
+  font: 700 32px Helvetica, sans-serif;
+}
+
+.title h2,
+.title a {
+  font: 400 24px Helvetica, sans-serif;
+}
+
+.title a {
+  line-height: 48px;
+}
+
+.title a:link,
+.title a:visited {
+  color: #fff;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.title a:hover {
+  text-decoration: underline #fff;
+}
+
+/*media queries*/
+
+@media screen and (max-width: 600px) {
+  .title h1 {
+    font-size: 24px;
+  }
+
+  .title h2,
+  .title a {
+    font-size: 18px;
+  }
+}
