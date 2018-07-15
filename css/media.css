@@ -9,7 +9,7 @@
 }
 
 @media screen and (max-width: 750px) {
-  #maincontent {
+  .inside #maincontent {
     position: relative;
     top: 115px;
   }
@@ -74,11 +74,6 @@
 }
 
 @media screen and (min-width: 751px) {
-  #maincontent {
-    position: relative;
-    top: 115px;
-  }
-
   /*Navigation*/
   nav h1 a {
     letter-spacing: 7px;
