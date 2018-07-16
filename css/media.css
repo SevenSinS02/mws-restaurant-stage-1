@@ -21,6 +21,7 @@
 
   #breadcrumb {
     width: 100%;
+    padding: 16px 24px;
   }
 
   /*Restaurant Filtering*/
@@ -81,9 +82,6 @@
     letter-spacing: 7px;
   }
 
-  #breadcrumb {
-    width: 100%;
-  }
   /*Restaurant Listing*/
   .restaurants-list-container {
     padding: 24px 48px;
@@ -123,7 +121,7 @@
   }
 }
 
-@media screen and (min-width: 912px) {
+@media screen and (min-width: 1025px) {
   /*Restaurant Details*/
   .inside #map-container {
     width: 50%;
@@ -147,6 +145,11 @@
 }
 
 @media screen and (min-width: 1120px) {
+  /*Navigation*/
+  #breadcrumb {
+    padding: 16px 80px;
+  }
+
   /*Restaurant Listing*/
   .restaurants-list-container {
     padding: 40px 80px;
