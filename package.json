@@ -1,0 +1,19 @@
+{
+  "name": "mws-restaurant-stage-1",
+  "version": "1.0.0",
+  "description": "PWA for Udacity nanodegree",
+  "main": "register-service-worker.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SevenSinS02/mws-restaurant-stage-1.git"
+  },
+  "author": "Kevin N <kevin.crownclown@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SevenSinS02/mws-restaurant-stage-1/issues"
+  },
+  "homepage": "https://github.com/SevenSinS02/mws-restaurant-stage-1#readme"
+}
