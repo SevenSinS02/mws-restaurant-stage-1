@@ -43,32 +43,24 @@ class DBHelper {
   /**
    * Fetch restaurants by a cuisine type with proper error handling.
    */
-  static fetchRestaurantByCuisine(cuisine, callback) {
+  static fetchRestaurantByCuisine(cuisine) {
     // Fetch all restaurants  with proper error handling
-    DBHelper.fetchRestaurants((error, restaurants) => {
-      if (error) {
-        callback(error, null);
-      } else {
-        // Filter restaurants to have only given cuisine type
-        const results = restaurants.filter((r) => r.cuisine_type == cuisine);
-        callback(null, results);
-      }
+    return DBHelper.fetchRestaurants().then((restaurants) => {
+      // Filter restaurants to have only given cuisine type
+      const results = restaurants.filter((r) => r.cuisine_type == cuisine);
+      return results;
     });
   }
 
   /**
    * Fetch restaurants by a neighborhood with proper error handling.
    */
-  static fetchRestaurantByNeighborhood(neighborhood, callback) {
+  static fetchRestaurantByNeighborhood(neighborhood) {
     // Fetch all restaurants
-    DBHelper.fetchRestaurants((error, restaurants) => {
-      if (error) {
-        callback(error, null);
-      } else {
-        // Filter restaurants to have only given neighborhood
-        const results = restaurants.filter((r) => r.neighborhood == neighborhood);
-        callback(null, results);
-      }
+    DBHelper.fetchRestaurants().then((restaurants) => {
+      // Filter restaurants to have only given neighborhood
+      const results = restaurants.filter((r) => r.neighborhood == neighborhood);
+      return results;
     });
   }
 
