@@ -23,7 +23,7 @@ gulp.task('default', ['copy-html', 'copy-images', 'styles', 'lint', 'scripts'], 
   });
 });
 
-gulp.task('dist', ['copy-html', 'copy-images', 'styles', 'lint', 'scripts-dist']);
+gulp.task('dist', ['copy-html', 'copy-images', 'styles', 'scripts-dist']);
 
 gulp.task('scripts', function() {
   gulp
