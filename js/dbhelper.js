@@ -56,7 +56,7 @@ class DBHelper {
       if (response.length > 0) {
         return response;
       } else {
-        fetch(DBHelper.DATABASE_URL, { method: 'get' })
+        return fetch(DBHelper.DATABASE_URL, { method: 'get' })
           .then(_parseJson)
           .then((data) => {
             _insert(data);
@@ -166,7 +166,7 @@ class DBHelper {
    * Restaurant image URL.
    */
   static imageUrlForRestaurant(restaurant) {
-    return `/dist/img/${restaurant.photograph}.jpg`;
+    return `dist/img/${restaurant.photograph}.jpg`;
   }
 
   /**

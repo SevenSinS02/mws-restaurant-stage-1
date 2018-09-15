@@ -90,7 +90,6 @@ const initMap = () => {
       'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
     id: 'mapbox.streets'
   }).addTo(newMap);
-
   updateRestaurants();
 };
 /* window.initMap = () => {
@@ -118,13 +117,12 @@ const updateRestaurants = () => {
 
   const cuisine = cSelect[cIndex].value;
   const neighborhood = nSelect[nIndex].value;
-
-  DBHelper.fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood)
+  return DBHelper.fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood)
     .then((restaurants) => {
       resetRestaurants(restaurants);
       fillRestaurantsHTML();
     })
-    .catch((err) => console.err(err));
+    .catch((err) => console.error(err));
 };
 
 /**

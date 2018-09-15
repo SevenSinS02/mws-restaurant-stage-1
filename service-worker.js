@@ -1,27 +1,25 @@
-const CACHE_NAME = 'restaurantReviews-v1';
-
+const CACHE_NAME = 'restaurantReviews-v2';
+const MAP_CACHE = 'map-cache';
 const filesToCache = [
   '/',
   'index.html',
   'restaurant.html',
   '404.html',
-  'js/main.js',
-  'js/restaurant_info.js',
-  'js/dbhelper.js',
-  'css/styles.css',
-  'css/404.css',
-  'css/media.css',
-  'img/1.jpg',
-  'img/2.jpg',
-  'img/3.jpg',
-  'img/4.jpg',
-  'img/5.jpg',
-  'img/6.jpg',
-  'img/7.jpg',
-  'img/8.jpg',
-  'img/9.jpg',
-  'img/10.jpg',
-  'img/error.jpg'
+  'dist/js/main.bundle.js',
+  'dist/js/restaurant.bundle.js',
+  'dist/css/all.css',
+  'img/logo.svg',
+  'dist/img/1.jpg',
+  'dist/img/2.jpg',
+  'dist/img/3.jpg',
+  'dist/img/4.jpg',
+  'dist/img/5.jpg',
+  'dist/img/6.jpg',
+  'dist/img/7.jpg',
+  'dist/img/8.jpg',
+  'dist/img/9.jpg',
+  'dist/img/10.jpg',
+  'dist/img/error.jpg'
 ];
 
 /* add files to cache */
@@ -43,7 +41,9 @@ self.addEventListener('activate', (evt) => {
       Promise.all(
         cacheList
           .filter(
-            (cacheName) => cacheName.startsWith('restaurantReviews-') && cacheName != CACHE_NAME
+            (cacheName) =>
+              cacheName.startsWith('restaurantReviews-') &&
+              ![CACHE_NAME, MAP_CACHE].includes(cacheName)
           )
           .map((cacheName) => {
             console.log('[ServiceWorker] Removing old cache', cacheName);
@@ -56,9 +56,15 @@ self.addEventListener('activate', (evt) => {
 
 /* hijack fetch requests and serve from cache if available */
 self.addEventListener('fetch', (evt) => {
-  console.log('[Service Worker] Fetch', evt.request.url);
+  var url = new URL(evt.request.url);
+  let request = evt.request;
+  if (url.pathname === '/restaurant.html') {
+    request = '/restaurant.html';
+  }
+
+  console.log('[Service Worker] Fetch', request.url);
   evt.respondWith(
-    caches.match(evt.request).then((res) => {
+    caches.match(request).then((res) => {
       console.log('[Service Worker] Response from cache', res);
       if (res) {
         console.log('[Service Worker] Found response in cache');
@@ -67,11 +73,13 @@ self.addEventListener('fetch', (evt) => {
       console.log('[Service Worker] No response from cache. About to Fetch from Network...');
       return fetch(evt.request.clone())
         .then((res) => {
-          if (res.status === 404) {
-            return caches.match('404.html');
-          }
           const resClone = res.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(evt.request, resClone));
+          if (url.hostname === 'unpkg.com') {
+            caches.open(MAP_CACHE).then((cache) => cache.put(request, resClone));
+          }
+          if (url.hostname === 'api.tiles.mapbox.com') {
+            caches.open(MAP_CACHE).then((cache) => cache.put(request, resClone));
+          }
           return res;
         })
         .catch((error) => {

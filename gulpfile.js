@@ -30,14 +30,10 @@ gulp.task('default', ['styles-dist', 'scripts-dist'], function() {
   browserSync.stream();
 });
 
-gulp.task('dist', ['clean', 'copy-html', 'copy-images', 'lint', 'styles-dist', 'scripts-dist']);
+gulp.task('dist', ['clean', 'copy-images', 'lint', 'styles-dist', 'scripts-dist']);
 
 gulp.task('clean', function() {
   return del(['dist/*']);
-});
-
-gulp.task('copy-html', () => {
-  gulp.src('index.html').pipe(gulp.dest('dist/'));
 });
 
 gulp.task('copy-images', function() {
