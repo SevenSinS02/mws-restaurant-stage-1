@@ -5,7 +5,8 @@
   "main": "register-service-worker.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "gulp dist"
+    "build": "gulp dist",
+    "start": "gulp"
   },
   "repository": {
     "type": "git",
@@ -30,10 +31,14 @@
   "devDependencies": {
     "@babel/core": "7.0.1",
     "@babel/preset-env": "7.0.0",
+    "babelify": "10.0.0",
+    "browserify": "16.2.2",
+    "del": "3.0.0",
     "eslint": "5.6.0",
-    "eslint-config-airbnb": "17.1.0",
-    "eslint-config-airbnb-base": "13.1.0",
     "eslint-plugin-import": "2.14.0",
-    "gulp-babel": "8.0.0"
+    "gulp-clean-css": "3.10.0",
+    "gulplog": "1.0.0",
+    "vinyl-buffer": "1.0.1",
+    "vinyl-source-stream": "2.0.0"
   }
 }

@@ -1,9 +1,7 @@
-@charset "utf-8";
 /* 404 CSS Document */
 
 body {
   margin: 0;
-  overflow: hidden;
 }
 
 .container {
@@ -41,11 +39,12 @@ body {
 }
 
 .title a:hover {
+  -webkit-text-decoration: underline #fff;
   text-decoration: underline #fff;
 }
 
 /*footer*/
-footer {
+.footer-offline {
   bottom: 0;
   position: absolute;
   color: #fff;

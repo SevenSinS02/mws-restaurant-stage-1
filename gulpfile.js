@@ -1,16 +1,26 @@
 /*eslint-env node */
 
+const browserify = require('browserify');
 const gulp = require('gulp');
+//vinyl is a virtual file format that gulp expects
+const source = require('vinyl-source-stream');
+const buffer = require('vinyl-buffer');
 const autoprefixer = require('gulp-autoprefixer');
 const browserSync = require('browser-sync').create();
 const eslint = require('gulp-eslint');
 const concat = require('gulp-concat');
 const uglify = require('gulp-uglify');
-const babel = require('gulp-babel');
+const cleanCSS = require('gulp-clean-css');
+const babelify = require('babelify');
 const sourcemaps = require('gulp-sourcemaps');
 const imagemin = require('gulp-imagemin');
+const log = require('gulplog');
+const del = require('del');
 
-gulp.task('default', ['copy-html', 'copy-images', 'styles', 'lint', 'scripts'], function() {
+const mainFiles = ['js/dbhelper.js', 'js/main.js'];
+const restaurantFiles = ['js/dbhelper.js', 'js/restaurant_info.js'];
+
+gulp.task('default', ['copy-images', 'styles', 'lint', 'scripts'], function() {
   gulp.watch('css/**/*.css', ['styles']);
   gulp.watch('js/**/*.js', ['lint']);
   gulp.watch('/index.html', ['copy-html']);
@@ -23,32 +33,14 @@ gulp.task('default', ['copy-html', 'copy-images', 'styles', 'lint', 'scripts'], 
   });
 });
 
-gulp.task('dist', ['copy-html', 'copy-images', 'styles', 'scripts-dist']);
+gulp.task('dist', ['clean', 'copy-html', 'copy-images', 'lint', 'styles-dist', 'scripts-dist']);
 
-gulp.task('scripts', function() {
-  gulp
-    .src('js/**/*.js')
-    .pipe(concat('all.js'))
-    .pipe(gulp.dest('dist/js'));
+gulp.task('clean', function() {
+  return del(['dist/*']);
 });
 
-gulp.task('scripts-dist', function() {
-  gulp
-    .src('js/**/*.js')
-    .pipe(sourcemaps.init())
-    .pipe(
-      babel({
-        presets: ['@babel/env']
-      })
-    )
-    .pipe(concat('all.js'))
-    .pipe(uglify())
-    .pipe(sourcemaps.write())
-    .pipe(gulp.dest('dist/js'));
-});
-
-gulp.task('copy-html', function() {
-  gulp.src('./index.html').pipe(gulp.dest('./dist'));
+gulp.task('copy-html', () => {
+  gulp.src('index.html').pipe(gulp.dest('dist/'));
 });
 
 gulp.task('copy-images', function() {
@@ -67,21 +59,54 @@ gulp.task('copy-images', function() {
     .pipe(gulp.dest('dist/img'));
 });
 
-gulp.task('styles', function() {
-  gulp
-    .src('css/**/*.css')
-    .pipe(
-      autoprefixer({
-        browsers: ['last 2 versions']
-      })
-    )
-    .pipe(gulp.dest('dist/css'))
-    .pipe(browserSync.stream());
-});
-
 gulp.task('lint', function() {
   return gulp
     .src(['js/**/*.js'])
     .pipe(eslint.format())
     .pipe(eslint.failOnError());
+});
+
+gulp.task('styles-dist', function() {
+  gulp
+    .src(['css/404.css', 'css/styles.css', 'css/media.css'])
+    .pipe(sourcemaps.init())
+    .pipe(autoprefixer({ browsers: ['last 2 versions'] }))
+    .pipe(cleanCSS({ compatibility: 'ie8' }))
+    .pipe(concat('all.css'))
+    .pipe(sourcemaps.write('./'))
+    .pipe(gulp.dest('dist/css'));
+});
+
+gulp.task('scripts-dist', function() {
+  mainFiles.map((file) => {
+    return browserify({
+      entries: [file],
+      debug: true
+    })
+      .transform(babelify, { presets: ['@babel/env'], sourceMaps: true })
+      .bundle()
+      .pipe(source('main.bundle.js')) //pipe to output file
+      .pipe(buffer())
+      .pipe(sourcemaps.init({ loadMaps: true }))
+      .pipe(uglify())
+      .on('error', log.error)
+      .pipe(sourcemaps.write('./'))
+      .pipe(gulp.dest('dist/js'));
+  });
+
+  restaurantFiles.map((file) => {
+    return browserify({
+      entries: [file],
+      debug: true
+    })
+      .transform(babelify, { presets: ['@babel/env'], sourceMaps: true })
+      .bundle()
+      .pipe(source('restaurant.bundle.js')) //pipe to output file
+      .pipe(buffer())
+      .pipe(sourcemaps.init({ loadMaps: true }))
+      .pipe(uglify())
+      .on('error', log.error)
+      .pipe(sourcemaps.write('./'))
+      .pipe(gulp.dest('dist/js'));
+  });
 });
