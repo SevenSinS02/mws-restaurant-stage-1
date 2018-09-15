@@ -1,9 +1,41 @@
+import idb from 'idb';
+
 /**
  * Common database helper functions.
  */
 
 function _parseJson(resp) {
   return resp.json();
+}
+
+function _checkIdb() {
+  return 'indexedDB' in window;
+}
+
+function _openIdb() {
+  if (!_checkIdb()) return;
+  return idb.open('restaurant-db', 1, (upgradeDb) =>
+    upgradeDb.createObjectStore('restaurants', { keyPath: 'id' })
+  );
+}
+
+function _insert(data) {
+  const dbPromise = _openIdb();
+  return dbPromise.then((db) => {
+    const tx = db.transaction('restaurants', 'readwrite');
+    const store = tx.objectStore('restaurants');
+    data.map((restaurant) => store.put(restaurant));
+    return tx.complete;
+  });
+}
+
+function _read() {
+  const dbPromise = _openIdb();
+  return dbPromise.then((db) => {
+    var tx = db.transaction('restaurants', 'readonly');
+    var store = tx.objectStore('restaurants');
+    return store.getAll();
+  });
 }
 
 class DBHelper {
@@ -20,7 +52,18 @@ class DBHelper {
    * Fetch all restaurants.
    */
   static fetchRestaurants() {
-    return fetch(DBHelper.DATABASE_URL, { method: 'get' }).then(_parseJson);
+    return _read().then((response) => {
+      if (response.length > 0) {
+        return response;
+      } else {
+        fetch(DBHelper.DATABASE_URL, { method: 'get' })
+          .then(_parseJson)
+          .then((data) => {
+            _insert(data);
+            return data;
+          });
+      }
+    });
   }
 
   /**
