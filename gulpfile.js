@@ -20,17 +20,14 @@ const del = require('del');
 const mainFiles = ['js/dbhelper.js', 'js/main.js'];
 const restaurantFiles = ['js/dbhelper.js', 'js/restaurant_info.js'];
 
-gulp.task('default', ['copy-images', 'styles', 'lint', 'scripts'], function() {
-  gulp.watch('css/**/*.css', ['styles']);
-  gulp.watch('js/**/*.js', ['lint']);
-  gulp.watch('/index.html', ['copy-html']);
+gulp.task('default', ['styles-dist', 'scripts-dist'], function() {
+  browserSync.init({ server: './' });
+
+  gulp.watch('css/**/*.css', ['styles-dist']);
+  gulp.watch('js/**/*.js', ['scripts-dist']);
   gulp.watch('js/*.js').on('change', browserSync.reload);
   gulp.watch('css/*.css').on('change', browserSync.reload);
-  gulp.watch('./dist/index.html').on('change', browserSync.reload);
-
-  browserSync.init({
-    server: './dist'
-  });
+  browserSync.stream();
 });
 
 gulp.task('dist', ['clean', 'copy-html', 'copy-images', 'lint', 'styles-dist', 'scripts-dist']);
