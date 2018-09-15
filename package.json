@@ -4,7 +4,8 @@
   "description": "PWA for Udacity nanodegree",
   "main": "register-service-worker.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "gulp"
   },
   "repository": {
     "type": "git",
@@ -15,5 +16,24 @@
   "bugs": {
     "url": "https://github.com/SevenSinS02/mws-restaurant-stage-1/issues"
   },
-  "homepage": "https://github.com/SevenSinS02/mws-restaurant-stage-1#readme"
+  "homepage": "https://github.com/SevenSinS02/mws-restaurant-stage-1#readme",
+  "dependencies": {
+    "browser-sync": "^2.24.7",
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^5.0.0",
+    "gulp-concat": "2.6.1",
+    "gulp-eslint": "5.0.0",
+    "gulp-imagemin": "4.1.0",
+    "gulp-sourcemaps": "2.6.4",
+    "gulp-uglify": "^3.0.1"
+  },
+  "devDependencies": {
+    "@babel/core": "7.0.1",
+    "@babel/preset-env": "7.0.0",
+    "eslint": "5.6.0",
+    "eslint-config-airbnb": "17.1.0",
+    "eslint-config-airbnb-base": "13.1.0",
+    "eslint-plugin-import": "2.14.0",
+    "gulp-babel": "8.0.0"
+  }
 }
