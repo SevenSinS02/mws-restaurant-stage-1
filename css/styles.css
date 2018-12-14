@@ -475,7 +475,7 @@ nav h1 a {
   height: 30px;
   border-radius: 5px;
   margin-bottom: 20px;
-  text-indent: 35px;
+  text-indent: 5px;
 }
 #review-form button {
   border: 0px;
@@ -485,4 +485,19 @@ nav h1 a {
   border-radius: 5px;
   padding: 12px;
   font-size: 14px;
+}
+
+#review {
+  color: orange;
+}
+
+.star {
+  color: #999;
+  margin-right: 10px;
+  font-size: 30px;
+  cursor: pointer;
+}
+
+.star-fill {
+  color: orange;
 }

@@ -9,6 +9,15 @@ document.addEventListener('DOMContentLoaded', (event) => {
   initMap();
 });
 
+document.getElementById('submit-review').addEventListener('click', onNewReview);
+const stars = document.getElementsByClassName('star');
+for (var i = 0; i < stars.length; i++) {
+  stars[i].addEventListener('click', function(evt) {
+    // console.log(evt.target.id)
+    getRating(evt.target.id);
+  });
+}
+
 /**
  * Initialize leaflet map
  */
@@ -204,3 +213,37 @@ const getParameterByName = (name, url) => {
   if (!results[2]) return '';
   return decodeURIComponent(results[2].replace(/\+/g, ' '));
 };
+
+/**
+ * Get Ratings
+ */
+function getRating(i) {
+  var review = document.getElementById('review');
+  switch (i) {
+    case '0':
+      review.innerHTML = 'Bad';
+      break;
+    case '1':
+      review.innerHTML = 'Average';
+      break;
+    case '2':
+      review.innerHTML = 'Good';
+      break;
+    case '3':
+      review.innerHTML = 'Very Good';
+      break;
+    case '4':
+      review.innerHTML = 'Excellent';
+      break;
+  }
+  for (var k = 0; k <= stars.length; k++) {
+    var elem = stars[k];
+    var exists = elem.classList.contains('star-fill');
+    if (k <= i && !exists) elem.classList.add('star-fill');
+    else if (k > i && exists) {
+      elem.classList.remove('star-fill');
+    }
+  }
+}
+
+const onNewReview = () => {};
