@@ -9,6 +9,7 @@ const filesToCache = [
   'dist/js/restaurant.bundle.js',
   'dist/css/all.css',
   'img/logo.svg',
+  'img/pen.svg',
   'dist/img/1.jpg',
   'dist/img/2.jpg',
   'dist/img/3.jpg',

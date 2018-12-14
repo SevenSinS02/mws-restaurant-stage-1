@@ -1,80 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Normalize.css for better cross-browser consistency -->
+    <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css" />
+    <!-- Main CSS file -->
+    <link rel="stylesheet" href="dist/css/all.css" />
+    <link
+      rel="stylesheet "
+      href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css "
+      integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
+      crossorigin=" "
+    />
+    <title>Restaurant Info</title>
+  </head>
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- Normalize.css for better cross-browser consistency -->
-  <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css" />
-  <!-- Main CSS file -->
-  <link rel="stylesheet" href="dist/css/all.css">
-  <link rel="stylesheet " href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css " integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
-    crossorigin=" " />
-  <title>Restaurant Info</title>
-</head>
+  <body class="inside">
+    <!-- Beginning header -->
+    <header>
+      <!-- Beginning nav -->
+      <nav>
+        <h1><a href="/ ">Restaurant Reviews</a></h1>
+        <ul id="breadcrumb" role="navigation" aria-label="Breadcrumb">
+          <li><a href="/ " aria-current="page">Home</a></li>
+        </ul>
+        <!-- End breadcrumb -->
+      </nav>
+      <!-- Beginning breadcrumb -->
 
-<body class="inside">
-  <!-- Beginning header -->
-  <header>
-    <!-- Beginning nav -->
-    <nav>
-      <h1>
-        <a href="/ ">Restaurant Reviews</a>
-      </h1>
-      <ul id="breadcrumb" role="navigation" aria-label="Breadcrumb">
-        <li>
-          <a href="/ " aria-current="page">Home</a>
-        </li>
-      </ul>
-      <!-- End breadcrumb -->
-    </nav>
-    <!-- Beginning breadcrumb -->
+      <!-- End nav -->
+    </header>
+    <!-- End header -->
 
-    <!-- End nav -->
-  </header>
-  <!-- End header -->
+    <!-- Beginning main -->
+    <main id="maincontent">
+      <!-- Beginning map -->
+      <section id="map-container"><div id="map" aria-label="Map" role="application"></div></section>
+      <!-- End map -->
+      <!-- Beginning restaurant -->
+      <section id="restaurant-container">
+        <h2 id="restaurant-name" tabindex="0"></h2>
+        <div class="tab-container">
+          <div class="tab" tabindex="0"><span> &hearts; Like</span></div>
+          <div class="tab" tabindex="0">
+            <a href="#review-form">
+              <img src="/img/pen.svg" class="pen-icon" width="15em" height="15em" />
+              <span>Write a Review</span>
+            </a>
+          </div>
+        </div>
+        <img id="restaurant-img" tabindex="0" />
+        <p id="restaurant-cuisine" tabindex="0"></p>
+        <p id="restaurant-address" tabindex="0"></p>
+        <table id="restaurant-hours" tabindex="0">
+          <caption>
+            Open On
+          </caption>
+        </table>
+      </section>
+      <!-- end restaurant -->
+      <!-- Beginning reviews -->
+      <section id="reviews-container"><ul id="reviews-list"></ul></section>
+      <!-- End reviews -->
+    </main>
+    <!-- End main -->
 
-  <!-- Beginning main -->
-  <main id="maincontent">
-    <!-- Beginning map -->
-    <section id="map-container">
-      <div id="map" aria-label="Map" role="application"></div>
-    </section>
-    <!-- End map -->
-    <!-- Beginning restaurant -->
-    <section id="restaurant-container">
-      <h2 id="restaurant-name" tabindex="0"></h2>
-      <img id="restaurant-img" tabindex="0">
-      <p id="restaurant-cuisine" tabindex="0"></p>
-      <p id="restaurant-address" tabindex="0"></p>
-      <table id="restaurant-hours" tabindex="0">
-        <caption>Open On</caption>
-      </table>
-    </section>
-    <!-- end restaurant -->
-    <!-- Beginning reviews -->
-    <section id="reviews-container">
-      <ul id="reviews-list"></ul>
-    </section>
-    <!-- End reviews -->
-  </main>
-  <!-- End main -->
-
-  <!-- Beginning footer -->
-  <footer id="footer">
-    Copyright (c) 2017
-    <a href="/ ">
-      <strong>Restaurant Reviews</strong>
-    </a> All Rights Reserved.
-  </footer>
-  <!-- End footer -->
-  <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js " integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw=="
-    crossorigin=" "></script>
-  <script defer charset="utf-8" type="application/javascript" src="dist/js/restaurant.bundle.js"></script>
-  <!-- Google Maps -->
-  <!--  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA_tKbW6A5pQ-eupxI56myUnHLqYCzOjKo&libraries=places&callback=initMap "></script> -->
-  <!-- End scripts -->
-
-</body>
-
+    <!-- Beginning footer -->
+    <footer id="footer">
+      Copyright (c) 2017 <a href="/ "> <strong>Restaurant Reviews</strong> </a> All Rights Reserved.
+    </footer>
+    <!-- End footer -->
+    <script
+      src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js "
+      integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw=="
+      crossorigin=" "
+    ></script>
+    <script
+      defer
+      charset="utf-8"
+      type="application/javascript"
+      src="dist/js/restaurant.bundle.js"
+    ></script>
+    <!-- Google Maps -->
+    <!--
+      <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA_tKbW6A5pQ-eupxI56myUnHLqYCzOjKo&libraries=places&callback=initMap "></script>
+    -->
+    <!-- End scripts -->
+  </body>
 </html>

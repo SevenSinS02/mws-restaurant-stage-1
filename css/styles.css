@@ -275,6 +275,45 @@ nav h1 a {
   border: none;
 }
 
+.tab-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+}
+.tab {
+  background: #444;
+  text-align: center;
+  padding: 10px;
+  margin: 10px 10px 10px 0px;
+}
+
+.tab:last-child {
+  margin: 10px 0px 10px 0px;
+}
+
+.tab span,
+.heart-icon,
+.write-icon {
+  color: #fff;
+}
+
+.heart-icon {
+  float: right;
+  margin: 20px;
+}
+.write-icon {
+  position: relative;
+  top: 3px;
+  left: 30px;
+}
+
 /* ====================== Restaurant Details ====================== */
 .inside header {
   position: fixed;
