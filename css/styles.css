@@ -461,3 +461,27 @@ nav h1 a {
 #restaurant-hours td {
   color: #666;
 }
+
+/* ====================== Review Form ====================== */
+
+#review-form {
+  width: 45%;
+  padding: 20px 40px;
+}
+#new-review {
+  width: 100%;
+  border: 1px solid lightgray;
+  height: 30px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  text-indent: 35px;
+}
+#review-form button {
+  border: 0px;
+  background-color: orange;
+  color: white;
+  height: auto;
+  border-radius: 5px;
+  padding: 12px;
+  font-size: 14px;
+}

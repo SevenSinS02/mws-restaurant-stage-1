@@ -160,7 +160,8 @@
 
   /*Restaurant Details*/
   #restaurant-container,
-  #reviews-container {
+  #reviews-container,
+  #review-form {
     padding: 40px 80px;
   }
 }
