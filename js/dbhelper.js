@@ -14,9 +14,10 @@ function _checkIdb() {
 
 function _openIdb() {
   if (!_checkIdb()) return;
-  return idb.open('restaurant-db', 1, (upgradeDb) =>
-    upgradeDb.createObjectStore('restaurants', { keyPath: 'id' })
-  );
+  return idb.open('restaurant-db', 1, (upgradeDb) => {
+    upgradeDb.createObjectStore('restaurants', { keyPath: 'id' });
+    upgradeDb.createObjectStore('reviews', { keyPath: 'id' });
+  });
 }
 
 function _insert(data) {
@@ -38,6 +39,35 @@ function _read() {
   });
 }
 
+/*
+ * Add Review to Indexeddb
+ */
+function _insertReview(review) {
+  const dbPromise = _openIdb();
+  return dbPromise.then((db) => {
+    var tx = db.transaction('reviews', 'readwrite');
+    var store = tx.objectStore('reviews');
+    store.put(review);
+    return tx.complete;
+  });
+}
+
+/*
+ * Fetch all Reviews for Restaurant ID
+ */
+function _readReview(id) {
+  const dbPromise = _openIdb();
+  return dbPromise
+    .then((db) => {
+      var tx = db.transaction('reviews', 'readonly');
+      var store = tx.objectStore('reviews');
+      return store.getAll();
+    })
+    .then((reviews) => {
+      return reviews.filter((review) => review.restaurant_id === id);
+    });
+}
+
 class DBHelper {
   /**
    * Database URL.
@@ -46,6 +76,15 @@ class DBHelper {
   static get DATABASE_URL() {
     const port = 1337; // Change this to your server port
     return `http://localhost:${port}/restaurants`;
+  }
+
+  /**
+   * Reviews URL.
+   *
+   */
+  static get REVIEWS_URL() {
+    const port = 1337;
+    return `http://localhost:${port}/reviews/`;
   }
 
   /**
@@ -152,6 +191,112 @@ class DBHelper {
       // Remove duplicates from cuisines
       const uniqueCuisines = cuisines.filter((v, i) => cuisines.indexOf(v) == i);
       return uniqueCuisines;
+    });
+  }
+
+  /**
+   * Fetch all reviews for restaurant id
+   */
+
+  static fetchAllReviewsById(id, callback) {
+    const currTime = Date.now();
+    _readReview(id).then((resp) => {
+      if (resp.length > 0) {
+        resp.sort((a, b) => currTime - a.updatedAt - (currTime - b.updatedAt));
+        callback(resp, null);
+      } else {
+        const URL = DBHelper.REVIEWS_URL + '?restaurant_id=' + id;
+        // console.log('URL', URL)
+        return fetch(URL, {
+          method: 'get'
+        })
+          .then((resp) => resp.json())
+          .then((data) => {
+            data.sort((a, b) => currTime - a.updatedAt - (currTime - b.updatedAt));
+            data.map((review) => _insertReview(review));
+            callback(data, null);
+          })
+          .catch((err) => callback(null, err));
+      }
+    });
+  }
+
+  /**
+   *  Add New Review
+   */
+  static addNewReview(name, comment, rating, id, callback) {
+    let body = {
+      id: Date.now(),
+      restaurant_id: id,
+      name: name,
+      rating: rating,
+      comments: comment,
+      createdAt: Date.now(),
+      updatedAt: Date.now()
+    };
+    // update reviews indexeDB
+    _insertReview(body);
+    //add review to db
+    DBHelper.sendReviewToDatabase(DBHelper.REVIEWS_URL, 'POST', body);
+
+    callback(null, null);
+  }
+
+  static sendReviewToDatabase(url = '', method, body) {
+    fetch(url, {
+      method: 'post',
+      body: JSON.stringify(body)
+    })
+      .then((resp) => {
+        console.log('POST resp', resp);
+      })
+      .catch((err) => {
+        /* console.log('post request failed', err) */
+      });
+  }
+
+  /**
+   * Update Favorite Restaurant
+   */
+
+  static onFavouriteSelected(id, newState) {
+    // update cached restaurant data
+    const dbPromise = DBHelper.openIdb();
+    // get the cache restaurant data
+    dbPromise
+      .then((db) => {
+        var tx = db.transaction('restaurants', 'readonly');
+        var store = tx.objectStore('restaurants');
+        return store.get(id);
+      })
+      .then((rest) => {
+        if (!rest) {
+          console.log('No such data exists in cache');
+          return;
+        }
+        // update the cache restaurant data
+        rest.isFavourite = newState;
+        dbPromise
+          .then((db) => {
+            var tx = db.transaction('restaurants', 'readwrite');
+            var store = tx.objectStore('restaurants');
+            store.put(rest);
+            return tx.complete;
+          })
+          .then(() => {
+            console.log('cache data updated');
+          });
+      });
+    // Update the original data
+  }
+
+  /**
+   * Update Favorite Restaurant
+   */
+  static handleFavoriteClick(id, newState) {
+    // console.log('DB', id, newState)
+    fetch(`http://localhost:1337/restaurants/${id}/?is_favorite=${newState}`, {
+      method: 'put'
     });
   }
 

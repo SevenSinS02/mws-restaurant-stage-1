@@ -9,12 +9,43 @@ document.addEventListener('DOMContentLoaded', (event) => {
   initMap();
 });
 
-document.getElementById('submit-review').addEventListener('click', onNewReview);
+document.getElementById('submit-review').addEventListener('click', (evt) => {
+  // console.log('evt', evt.target)
+  const name = document.getElementById('reviewer-name');
+  const comment = document.getElementById('review');
+  if (name.value == '' || comment.value == '' || rating == -1) {
+    alert('Please fill all the fields');
+    return;
+  }
+  // if none of the fields are empty
+  DBHelper.addNewReview(name.value, comment.value, rating, self.restaurant.id, (resp, err) => {
+    if (err) {
+      // console.log('Submit Review Failed')
+      return;
+    }
+    // reset the form
+    name.value = '';
+    comment.value = '';
+    for (var i = 0; i < stars.length; i++) {
+      if (stars[i].classList.contains('star-fill')) {
+        stars[i].classList.remove('star-fill');
+      }
+    }
+  });
+  // disable the button , to disallow multiple clicks
+  evt.target.disabled = true;
+  evt.target.style.cursor = 'not-allowed';
+  // console.log('location', location)
+  location.reload();
+});
+
 const stars = document.getElementsByClassName('star');
+var rating = -1;
 for (var i = 0; i < stars.length; i++) {
   stars[i].addEventListener('click', function(evt) {
     // console.log(evt.target.id)
-    getRating(evt.target.id);
+    rating = evt.target.id;
+    getRating(rating);
   });
 }
 
@@ -101,6 +132,11 @@ const fillRestaurantHTML = (restaurant = self.restaurant) => {
   image.setAttribute('alt', `Image of ${restaurant.name} restaurant`);
   image.className = 'restaurant-img';
   image.src = DBHelper.imageUrlForRestaurant(restaurant);
+  const elem = document.getElementById('like');
+  if (restaurant.isFavourite) elem.classList.add('heart-fill');
+  else {
+    elem.classList.remove('heart-fill');
+  }
 
   const cuisine = document.getElementById('restaurant-cuisine');
   cuisine.setAttribute('aria-label', `Cuisine ${restaurant.cuisine_type}`);
@@ -111,7 +147,7 @@ const fillRestaurantHTML = (restaurant = self.restaurant) => {
     fillRestaurantHoursHTML();
   }
   // fill reviews
-  fillReviewsHTML();
+  fillReviewsHTML(restaurant.id);
 };
 
 /**
@@ -137,25 +173,28 @@ const fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hour
 /**
  * Create all reviews HTML and add them to the webpage.
  */
-const fillReviewsHTML = (reviews = self.restaurant.reviews) => {
-  const container = document.getElementById('reviews-container');
-  const title = document.createElement('h2');
-  title.innerHTML = 'Reviews';
-  title.setAttribute('tabindex', '0');
-  container.appendChild(title);
+const fillReviewsHTML = (id) => {
+  DBHelper.fetchAllReviewsById(id, (reviews, error) => {
+    if (error) return;
+    const container = document.getElementById('reviews-container');
+    const title = document.createElement('h2');
+    title.innerHTML = 'Reviews';
+    title.setAttribute('tabindex', '0');
+    container.appendChild(title);
 
-  if (!reviews) {
-    const noReviews = document.createElement('p');
-    noReviews.innerHTML = 'No reviews yet!';
-    noReviews.setAttribute('tabindex', '0');
-    container.appendChild(noReviews);
-    return;
-  }
-  const ul = document.getElementById('reviews-list');
-  reviews.forEach((review) => {
-    ul.appendChild(createReviewHTML(review));
+    if (!reviews) {
+      const noReviews = document.createElement('p');
+      noReviews.innerHTML = 'No reviews yet!';
+      container.appendChild(noReviews);
+      return;
+    }
+    const ul = document.getElementById('reviews-list');
+    reviews.forEach((review) => {
+      // console.log('REVIEW', review)
+      ul.appendChild(createReviewHTML(review));
+    });
+    container.appendChild(ul);
   });
-  container.appendChild(ul);
 };
 
 /**
@@ -172,7 +211,18 @@ const createReviewHTML = (review) => {
   div.appendChild(name);
 
   const date = document.createElement('p');
-  date.innerHTML = review.date;
+  const millis = Date.now() - review.updatedAt;
+  const time = Math.floor(millis / 1000);
+  var mins = Math.floor(time / 60);
+  var hrs = Math.floor(mins / 60);
+  var days = Math.floor(hrs / 24);
+  var months = Math.floor(days / 30);
+  if (time === 0) date.innerHTML = 'Updated Recently';
+  else if (months > 0) date.innerHTML = `Updated ${months} months ago`;
+  else if (days > 0) date.innerHTML = `Updated ${days} days ago`;
+  else if (hrs > 0) date.innerHTML = `Updated ${hrs} hours ago`;
+  else if (mins > 0) date.innerHTML = `Updated ${mins} mins ago`;
+  else date.innerHTML = `Updated ${time} seconds ago`;
   div.appendChild(date);
   div.classList.add('review-title');
   li.appendChild(div);
@@ -236,9 +286,10 @@ function getRating(i) {
       review.innerHTML = 'Excellent';
       break;
   }
-  for (var k = 0; k <= stars.length; k++) {
-    var elem = stars[k];
-    var exists = elem.classList.contains('star-fill');
+  for (let k = 0; k <= stars.length; k++) {
+    console.log(stars[k].classList);
+    const elem = stars[k];
+    const exists = elem.classList.contains('star-fill');
     if (k <= i && !exists) elem.classList.add('star-fill');
     else if (k > i && exists) {
       elem.classList.remove('star-fill');
@@ -246,4 +297,12 @@ function getRating(i) {
   }
 }
 
-const onNewReview = () => {};
+const handleFavoriteClick = (id, newState) => {
+  var elem = document.getElementById('like');
+  if (newState) elem.classList.add('heart-fill');
+  else {
+    elem.classList.remove('heart-fill');
+  }
+  elem.onclick = () => handleFavoriteClick(id, !newState);
+  DBHelper.handleFavoriteClick(id, newState);
+};

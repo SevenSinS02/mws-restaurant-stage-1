@@ -469,7 +469,7 @@ nav h1 a {
   width: 45%;
   padding: 20px 40px;
 }
-#new-review {
+#review {
   width: 100%;
   border: 1px solid lightgray;
   height: 30px;
@@ -487,7 +487,7 @@ nav h1 a {
   font-size: 14px;
 }
 
-#review {
+#review-grade {
   color: orange;
 }
 
@@ -500,4 +500,8 @@ nav h1 a {
 
 .star-fill {
   color: orange;
+}
+
+.heart-fill {
+  color: red;
 }
